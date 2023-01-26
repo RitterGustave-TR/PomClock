@@ -1,5 +1,8 @@
 {
   "files": [],
+  "compilerOptions": {
+    "types": ["chrome"]
+  },
   "references": [
     {
       "path": "./tsconfig.config.json"

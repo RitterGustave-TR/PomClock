@@ -5,6 +5,9 @@
   "compilerOptions": {
     "composite": true,
     "baseUrl": ".",
+    "types": ["chrome"],
+    "lib": ["ESNext", "DOM"],
+    "target": "ESNext",
     "paths": {
       "@/*": ["./src/*"]
     }

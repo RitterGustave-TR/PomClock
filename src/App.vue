@@ -1,22 +1,25 @@
 <template>
-	<div class="container">
-		<div class="timer">{{ minutes }}:{{ seconds }}</div>
-		<span>Ritters Pom Clock</span>
+	<div class="container" :class="{ timerCountDownBg: isCountingDown }">
+		<span>Ritters Pomodoro</span>
+		<TimerBoard :minutes="minutes" :seconds="seconds" />
 		<div class="controls">
-			<button @click="startTimer">Start</button>
-			<button @click="stopTimer">Stop</button>
-			<button @click="resetTimer">Reset</button>
+			<Button label="Start" @click="startTimer" class="p-button-sm" />
+			<Button label="Stop" @click="stopTimer" class="p-button-sm" />
+			<Button label="Reset" @click="resetTimer" class="p-button-sm" />
 		</div>
 	</div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import Button from "primevue/button";
+import TimerBoard from "@/components/TimerBoard/TimerBoard.vue";
 
 declare interface AppComponentData {
 	minutes: number;
 	seconds: number;
 	intervalId: undefined | number;
+	isCountingDown: boolean;
 }
 
 export default defineComponent({
@@ -25,12 +28,15 @@ export default defineComponent({
 			minutes: 25,
 			seconds: 0,
 			intervalId: undefined,
+			isCountingDown: false,
 		};
 	},
 	methods: {
 		startTimer() {
 			if (!this.intervalId) {
-				this.intervalId = setInterval(() => {
+				this.isCountingDown = true;
+
+				this.intervalId = window.setInterval(() => {
 					if (this.seconds > 0) {
 						this.seconds--;
 					} else if (this.minutes > 0) {
@@ -41,17 +47,36 @@ export default defineComponent({
 						this.resetTimer();
 						// Add code here to notify the user that the timer is done
 					}
-				}, 1000) as unknown as number;
+				}, 1000);
 			}
 		},
 		stopTimer() {
 			clearInterval(this.intervalId);
 			this.intervalId = undefined;
+			this.isCountingDown = false;
 		},
 		resetTimer() {
 			this.minutes = 25;
 			this.seconds = 0;
 		},
+	},
+	components: {
+		Button,
+		TimerBoard,
+	},
+	beforeUnmount() {
+		// chrome.storage.local.set({'test': this.seconds})
+	},
+	unmounted() {
+		clearInterval(this.intervalId);
+	},
+	mounted() {
+		// chrome.storage.local.get('test').then(result => {
+		// 	console.log(result);
+		// 	let stored = ;
+		// 	console.log(stored++);
+		// 	chrome.storage.local.set({'test': stored});
+		// });
 	},
 });
 </script>
@@ -62,23 +87,19 @@ export default defineComponent({
 	flex-direction: column;
 	align-items: center;
 
-	width: 300px;
-	height: 100px;
+	margin: auto;
+	padding: 20px;
+
+	max-width: 300px;
+	/* height: 100px; */
 }
 
-.timer {
-	font-size: 36px;
-	text-align: center;
+.timerCountDownBg {
+	background-color: rgba(126, 0, 0, 0.353);
 }
 
 .controls {
-	text-align: center;
-}
-
-button {
-	padding: 8px 16px;
-	margin: 8px;
-	font-size: 16px;
-	border-radius: 4px;
+	display: flex;
+	gap: 15px;
 }
 </style>

@@ -3,6 +3,9 @@
 	"name": "RittersPomClock",
 	"description": "A Pomdoro Clock extension for chrome!",
 	"version": "0.0.1",
+	"permissions": [
+		"storage"
+	],
 	"action": {
 		"default_popup": "index.html"
 	}

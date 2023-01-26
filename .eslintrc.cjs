@@ -16,4 +16,7 @@ module.exports = {
 	rules: {
 		indent: ["error", "tab"],
 	},
+	env: {
+		webExtensions: true,
+	},
 };
